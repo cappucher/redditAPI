@@ -1,0 +1,29 @@
+.post{
+    border: 2px solid black;
+    margin: 5px;
+    border-radius: 8px;
+    padding: 5px;
+    font-family: sans-serif;
+}
+
+.post > div:nth-child(1){
+    font-size: 20px;
+}
+
+a{
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+
+img{
+    width: 600px;
+    height: 600px;
+}
+
+a:hover{
+    color: purple
+}
+a:active{
+    color: red;
+}
