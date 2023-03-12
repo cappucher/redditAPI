@@ -21,12 +21,12 @@ const fetchData = (url) => {
 
 const process = async (url) => {
     const data = await fetchData(url);
-    try{
+    // try{
         processData(data);
-    }
-    catch{
-        console.log("error");
-    }
+    // }
+    // catch{
+    //     console.log("error");
+    // }
 }
 
 const compare = (a, b) => {
@@ -53,7 +53,14 @@ const processData = (data) => {
         else{
             object["image"] = data.data.children[i].data.url_overridden_by_dest;
         }
-        object["nsfw"] = data.data.children[i].data.whitelist_status.includes("promo_adult_nsfw") ? true : false;
+        if (document.querySelector("#subreddit").value != "popular" && document.querySelector("#subreddit").value != "all"){
+            object["nsfw"] = data.data.children[i].data.whitelist_status.includes("promo_adult_nsfw") ? true : false;
+            object["subreddit"] = `https://www.reddit.com/r/${document.querySelector("#subreddit").value}.json?limit=100`
+        }
+        else{
+            object["nsfw"] = false;
+            object["subreddit"] = data.data.children[i].data.subreddit;
+        }
         object["url"] = `https://www.reddit.com${data.data.children[i].data.permalink}`
         posts.push(object);
     }
@@ -87,6 +94,11 @@ const processData = (data) => {
         title.appendChild(link);
         content.appendChild(title);
         content.appendChild(upvotes);
+        if (document.querySelector("#subreddit").value == "popular" || document.querySelector("#subreddit").value == "all"){
+            const subredditValue = document.createElement('div');
+            subredditValue.textContent = `r/${posts[i].subreddit}`;
+            content.appendChild(subredditValue);
+        }
         if (posts[i].nsfw){
             const nsfw = document.createElement('div');
             nsfw.textContent = "CAUTION: NSFW";
@@ -100,6 +112,7 @@ const processData = (data) => {
         if (posts[i].image != "self" && !posts[i].nsfw){
             content.appendChild(image);
         }
+        
         postDivs.appendChild(content);
     }
     document.body.appendChild(postDivs);
